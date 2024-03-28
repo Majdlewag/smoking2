@@ -151,3 +151,84 @@ async def create_upload_file(file: UploadFile):
     #return {"prediction": float(answer)}
     #return {"filename": file.filename}
     #['Bengin cases', 'Malignant cases', 'Normal cases']
+
+
+@app.get("/predictMLex")
+def predict(F3,F4,F5,F6,F7,F8,F9,F10,
+            F11,F12,F13,F14,F15,F16,F17,F18,
+            F19,F20,F21,F22,F23,F25,F26h):
+
+    new_dataa = floatingg([F3,F4,F5,F6,F7,F8,F9,F10,
+                F11,F12,F13,F14,F15,F16,F17,F18,
+                F19,F20,F21,F22,F23,F25])# make a TUPLE!!!!!!!!!! faster lighter
+    #new_data = pd.to_numeric(new_data)
+    new_data22 = [F26h]
+
+    #new_dataa.insert(1,new_data22[0])
+    #new_dataa.insert(21,new_data22[0])
+    new_dataa.insert(22,new_data22[0])
+
+    new_dataa = pd.DataFrame([new_dataa],columns=['age', 'height(cm)', 'weight(kg)', 'waist(cm)', 'eyesight(left)', 'eyesight(right)', 'hearing(left)', 'hearing(right)', 'systolic', 'relaxation', 'fasting blood sugar', 'Cholesterol', 'triglyceride', 'HDL', 'LDL', 'hemoglobin', 'Urine protein', 'serum creatinine', 'AST', 'ALT', 'Gtp', 'dental caries', 'tartar'])
+    print(new_dataa.shape)
+
+    #Step1
+    #path1 = os.path.join(os.path.dirname(os.path.dirname(__file__)), "models","label_pre.pkl")
+    #labeler = pickle.load(path1)
+
+    #with open('models/label_pre.pkl', 'rb') as file:
+    #    labeler = pickle.load(file)
+
+    #labeler.transform(new_data[['gender']]) # needs re-defining? ,'oral', 'tartar'4
+    #labeler.transform(new_data[['oral']])
+    #labeler.transform(new_data[['tartar']])
+    #print(new_data.head())
+
+
+    with open("modelsv5/oher_pre.pkl", 'rb') as file:
+        oher = pickle.load(file)
+    #ohe = OneHotEncoder(drop='if_binary',sparse=False, handle_unknown='ignore')
+    #new_data[["gender","oral","tartar"]] = ohe.fit_transform(new_data[["gender","oral","tartar"]])
+    new_dataa[["tartar"]] = oher.transform(new_dataa[["tartar"]])
+    #new_data[["gender","oral","tartar"]] =
+
+
+    # Combining together left and right eyesight and hearing
+    columns_to_replace = ['eyesight(left)', 'eyesight(right)', 'hearing(left)', 'hearing(right)']
+
+    new_dataa['eyesight'] = new_dataa[['eyesight(left)', 'eyesight(right)']].mean(axis=1)
+    new_dataa['hearing'] = new_dataa[['hearing(left)', 'hearing(right)']].mean(axis=1)
+    new_dataa = new_dataa.drop(['eyesight(left)', 'eyesight(right)','hearing(left)', 'hearing(right)'],axis = 1)
+
+    new_dataa = new_dataa.drop(columns=['Urine protein'])
+    #columns_of_interest = ['ALT','relaxation','triglyceride', 'AST','height(cm)','weight(kg)','waist(cm)' ,'fasting blood sugar','Cholesterol', 'triglyceride', 'HDL', 'LDL', 'serum creatinine', 'Gtp', 'systolic', 'hemoglobin']
+
+
+
+
+
+    #Step2
+    #print("YEEEEEEEEEEEEEEESSSSSSSSSSSSSSSSSSSSSSSSSSSS???????????????????")
+    with open("modelsv5/scale_pre.pkl", 'rb') as file:
+        scaler = pickle.load(file)
+    #path2 = os.path.join(os.path.dirname(os.path.dirname(__file__)), "models","scale_pre.pkl")
+    #print(path2)
+    #scaler = pickle.load(path2)
+    #print("abcdjknvsknfskbnfs!!!!!!!!!!!!???????????????????")
+
+    #scaler.transform(new_dataa)
+    X_st = pd.DataFrame(scaler.transform(new_dataa))
+
+    #Step3 predict
+    with open('modelsv5/model_pre.pkl', 'rb') as file:
+        model = pickle.load(file)
+    #path3 = os.path.join(os.path.dirname(os.path.dirname(__file__)), "models","model_pre.pkl")
+    #model = pickle.load(path3)
+    print("aaaaaaaaaaaaaaaaaaaaaabbbsdkjvdfnvdfvdkjnvdfkjnfdjaaaaaaaaaaaaaaaaaaaaa")
+    print(X_st.shape)
+    prediction = model.predict(np.reshape(X_st,(1,20)))
+
+    print("pred below full")
+    print(prediction)
+    print(prediction[0])
+
+    return {"prediction": float(prediction[0])}
