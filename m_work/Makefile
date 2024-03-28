@@ -24,7 +24,9 @@ create_artifacts_repo:
 
 # Step 3
 build_for_production:
-	docker build -t  $$GCP_REGION-docker.pkg.dev/$$GCP_PROJECT/$$ARTIFACTSREPO/$$IMAGE:prod .
+	docker build -t $$GCP_REGION-docker.pkg.dev/$$GCP_PROJECT/$$ARTIFACTSREPO/$$IMAGE:prod .
+
+#docker build -t momo .
 
 ### Step 3 (⚠️ M1 SPECIFICALLY)
 #m1_build_image_production:
