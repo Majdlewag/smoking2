@@ -1,7 +1,6 @@
 setup.py
 package_folder/__init__.py
 package_folder/api_file.py
-package_folder/api_fileM.py
 package_folder/frontend_file.py
 package_folder/utils.py
 package_folder.egg-info/PKG-INFO

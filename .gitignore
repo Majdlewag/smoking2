@@ -1,6 +1,9 @@
-raw_data/
 .python-version
 .env
 passwords.txt
 ElinaJosh/
+ElinaJosh/logistic_pipeline.pkl
 notebooks/
+raw_data/
+m_work/Ahmed_Lung_Cancer_Prediction.ipynb
+m_work/Ahmed_majd_modif.ipynb
