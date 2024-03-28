@@ -4,6 +4,7 @@ FROM python:3.11-slim-bookworm
 COPY package_folder package_folder
 COPY requirements.txt requirements.txt
 COPY models models
+COPY modelsv5 modelsv5
 COPY setup.py setup.py
 
 #RUN pip install requirements.txt
